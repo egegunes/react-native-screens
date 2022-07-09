@@ -1,6 +1,8 @@
 import React, { PropsWithChildren, ReactNode } from 'react';
 import {
   Animated,
+  findNodeHandle,
+  NativeModules,
   Image,
   ImageProps,
   Platform,
@@ -85,7 +87,12 @@ let NativeScreenStackHeaderSubview: React.ComponentType<
   React.PropsWithChildren<ViewProps & { type?: HeaderSubviewTypes }>
 >;
 let AnimatedNativeScreen: React.ComponentType<ScreenProps>;
-let NativeSearchBar: React.ComponentType<SearchBarProps>;
+let NativeSearchBar: React.ComponentType<SearchBarProps> & {
+  focus: (reactTag: number | null) => void;
+  blur: (reactTag: number | null) => void;
+  clearText: (reactTag: number | null) => void;
+  toggleCancelButton: (reactTag: number | null, flag: boolean) => void;
+};
 let NativeFullWindowOverlay: React.ComponentType<
   PropsWithChildren<{
     style: StyleProp<ViewStyle>;
@@ -379,6 +386,38 @@ const ScreenStackHeaderBackButtonImage = (props: ImageProps): JSX.Element => (
   </ScreensNativeModules.NativeScreenStackHeaderSubview>
 );
 
+class SearchBar extends React.Component<SearchBarProps> {
+  blur() {
+    return NativeModules.RNSSearchBarManager.blur(findNodeHandle(this));
+  }
+
+  focus() {
+    return NativeModules.RNSSearchBarManager.focus(findNodeHandle(this));
+  }
+
+  toggleCancelButton(flag: boolean) {
+    return NativeModules.RNSSearchBarManager.toggleCancelButton(
+      findNodeHandle(this),
+      flag
+    );
+  }
+
+  clearText() {
+    return NativeModules.RNSSearchBarManager.clearText(findNodeHandle(this));
+  }
+
+  render() {
+    if (!isSearchBarAvailableForCurrentPlatform) {
+      console.warn(
+        'Importing SearchBar is only valid on iOS and Android devices.'
+      );
+      return View;
+    }
+
+    return <ScreensNativeModules.NativeSearchBar {...this.props} />;
+  }
+}
+
 const ScreenStackHeaderRightView = (
   props: React.PropsWithChildren<ViewProps>
 ): JSX.Element => (
@@ -474,6 +513,7 @@ module.exports = {
   get ScreenStackHeaderSubview() {
     return ScreensNativeModules.NativeScreenStackHeaderSubview;
   },
+
   get SearchBar() {
     if (!isSearchBarAvailableForCurrentPlatform) {
       console.warn(
@@ -484,6 +524,7 @@ module.exports = {
 
     return ScreensNativeModules.NativeSearchBar;
   },
+
   // these are functions and will not be evaluated until used
   // so no need to use getters for them
   ScreenStackHeaderBackButtonImage,
