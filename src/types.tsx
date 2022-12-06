@@ -11,6 +11,7 @@ type SearchBarRefObject = React.RefObject<{
   focus: () => void;
   blur: () => void;
   clearText: () => void;
+  setText: (text: string) => void;
   toggleCancelButton: (flag: boolean) => void;
 }>;
 
