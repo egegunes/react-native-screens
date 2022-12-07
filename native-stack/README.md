@@ -556,6 +556,10 @@ Focus on search bar.
 
 Remove focus from search bar.
 
+##### `setText` (iOS only)
+
+Insert text into the search bar.
+
 ##### `clearText` (iOS only)
 
 Clear text in search bar.

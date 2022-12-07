@@ -89,6 +89,7 @@ let NativeSearchBar: React.ComponentType<SearchBarProps> & {
   focus: (reactTag: number | null) => void;
   blur: (reactTag: number | null) => void;
   clearText: (reactTag: number | null) => void;
+  setText: (reactTag: number | null, text: string) => void;
   toggleCancelButton: (reactTag: number | null, flag: boolean) => void;
 };
 let NativeFullWindowOverlay: React.ComponentType<View>;
@@ -378,6 +379,13 @@ class SearchBar extends React.Component<SearchBarProps> {
 
   clearText() {
     return NativeModules.RNSSearchBarManager.clearText(findNodeHandle(this));
+  }
+
+  setText(text: string) {
+    return NativeModules.RNSSearchBarManager.setText(
+      findNodeHandle(this),
+      text
+    );
   }
 
   render() {

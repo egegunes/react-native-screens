@@ -34,6 +34,7 @@ const MainScreen = ({ navigation }: MainScreenProps): JSX.Element => {
 
   const [search, setSearch] = useState('');
   const [placeholder, setPlaceholder] = useState('Search for something...');
+  const [value, setValue] = useState('');
   const [barTintColor, setBarTintColor] = useState<BarTintColor>('white');
   const [hintTextColor, setHintTextColor] = useState<BarTintColor>('orange');
   const [headerIconColor, setHeaderIconColor] = useState<BarTintColor>(
@@ -178,6 +179,15 @@ const MainScreen = ({ navigation }: MainScreenProps): JSX.Element => {
       <Text style={styles.heading}>Imperative actions</Text>
       <Button onPress={() => searchBarRef.current?.blur()} title="Blur" />
       <Button onPress={() => searchBarRef.current?.focus()} title="Focus" />
+      <SettingsInput
+        label="Value to insert"
+        value={value}
+        onValueChange={setValue}
+      />
+      <Button
+        onPress={() => searchBarRef.current?.setText(value)}
+        title="Insert text"
+      />
       <Button
         onPress={() => searchBarRef.current?.clearText()}
         title="Clear Text"
