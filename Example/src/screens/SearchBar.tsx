@@ -177,6 +177,8 @@ const MainScreen = ({ navigation }: MainScreenProps): JSX.Element => {
         onValueChange={setShouldShowHintSearchIcon}
       />
       <Text style={styles.heading}>Imperative actions</Text>
+      <Button onPress={() => searchBarRef.current?.blur()} title="Blur" />
+      <Button onPress={() => searchBarRef.current?.focus()} title="Focus" />
       <SettingsInput
         label="Value to insert"
         value={value}
@@ -184,10 +186,8 @@ const MainScreen = ({ navigation }: MainScreenProps): JSX.Element => {
       />
       <Button
         onPress={() => searchBarRef.current?.setText(value)}
-        title="Blur"
+        title="Insert text"
       />
-      <Button onPress={() => searchBarRef.current?.blur()} title="Blur" />
-      <Button onPress={() => searchBarRef.current?.focus()} title="Focus" />
       <Button
         onPress={() => searchBarRef.current?.clearText()}
         title="Clear Text"
